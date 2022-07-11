@@ -1,26 +1,55 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import styled from 'styled-components';
 import { MdSearch } from 'react-icons/md';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+
+import {
+	checkUserRequest,
+	searchGithubUser,
+	toggleError,
+} from '../features/githubUserSlice';
 
 const Search = () => {
 	const [user, setUser] = useState('');
+	const { request, error, loading, githubUsers } = useSelector(
+		(store) => store.githubUser
+	);
+	const dispatch = useDispatch();
 
 	const onSubmitHandler = (e) => {
 		e.preventDefault();
-		console.log(user);
+
+		if (!user) {
+			dispatch(toggleError('User is empty'));
+		}
+		dispatch(searchGithubUser(user));
 	};
+
+	useEffect(() => {
+		dispatch(checkUserRequest());
+	}, []);
 
 	return (
 		<section>
 			<Container className='section-center'>
+				{error.show && (
+					<ErrorWrapper>
+						<p>{error.msg}</p>
+					</ErrorWrapper>
+				)}
 				<form onSubmit={onSubmitHandler} className='form-control'>
 					<MdSearch />
-					<input type='text' placeholder='Enter Github User' />
-					<button type='submit' className='btn'>
-						Search
-					</button>
+					<input
+						type='text'
+						placeholder='Enter Github User'
+						value={user}
+						onChange={(e) => setUser(e.target.value)}
+					/>
+
+					{request > 0 && !loading && <button type='submit'>search</button>}
 				</form>
-				<h3>Request : 59/60</h3>
+				<h3>Request : {request}/60</h3>
 			</Container>
 		</section>
 	);
