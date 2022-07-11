@@ -1,10 +1,17 @@
-import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+
+import { Dashboard, Login, Error } from './pages'
+
 
 function App() {
   return (
-    <div className="App">
-
-    </div>
+    <Router >
+      <Routes>
+        <Route path='/' element={<Dashboard />} />
+        <Route path='/login' element={<Login />} />
+        <Route path='*' element={<Error />} />
+      </Routes>
+    </Router>
   );
 }
 
