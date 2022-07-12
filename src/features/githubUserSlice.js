@@ -8,28 +8,28 @@ import {
 	searchGithubUserThunk,
 } from './githubUserThunk';
 
-const URL = 'https://api.github.com';
+const ROOT_URL = 'https://api.github.com';
 
 const initialState = {
 	githubUsers: mockUser,
 	repos: mockRepos,
 	followers: mockFollowers,
 	request: 60,
-	loading: false,
+	loading: true,
 	error: { show: false, msg: '' },
 };
 
 export const checkUserRequest = createAsyncThunk(
 	'user/checkRequest',
 	async (thunkAPI) => {
-		return checkUserRequestThunk(`${URL}/rate_limit`, thunkAPI);
+		return checkUserRequestThunk(`${ROOT_URL}/rate_limit`, thunkAPI);
 	}
 );
 
 export const searchGithubUser = createAsyncThunk(
 	'/user/searchUser',
 	async (user, thunkAPI) => {
-		return searchGithubUserThunk(user, `${URL}/users`, thunkAPI);
+		return searchGithubUserThunk(user, `${ROOT_URL}/users`, thunkAPI);
 	}
 );
 
@@ -60,8 +60,11 @@ const githubUserSlice = createSlice({
 			state.loading = true;
 		},
 		[searchGithubUser.fulfilled]: (state, { payload }) => {
+			const { githubUser, repos, followers } = payload;
 			state.loading = false;
-			state.githubUsers = payload;
+			state.githubUsers = githubUser;
+			// state.repos = repos;
+			state.followers = followers;
 			state.error = { show: false, msg: '' };
 		},
 		[searchGithubUser.rejected]: (state, { payload }) => {

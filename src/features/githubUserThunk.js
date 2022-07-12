@@ -14,11 +14,19 @@ const searchGithubUserThunk = async (user, url, thunkAPI) => {
 	try {
 		const response = await axios.get(`${url}/${user}`);
 
-		if (!response.data) {
-			thunkAPI.dispatch(toggleError('User not Found !'));
-		}
+		const githubUser = response.data;
+		const { login, followers_url } = githubUser;
+
+		const { data: repos } = await axios.get(
+			`${url}/${login}/repos?per_page=100`
+		);
+
+		const { data: followers } = await axios.get(
+			`${followers_url}?per_page=100`
+		);
+
 		thunkAPI.dispatch(checkUserRequest());
-		return response.data;
+		return { githubUser, repos, followers };
 	} catch (error) {
 		const message = error.response.statusText;
 

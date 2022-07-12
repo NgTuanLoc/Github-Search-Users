@@ -12,9 +12,7 @@ import {
 
 const Search = () => {
 	const [user, setUser] = useState('');
-	const { request, error, loading, githubUsers } = useSelector(
-		(store) => store.githubUser
-	);
+	const { request, error, loading } = useSelector((store) => store.githubUser);
 	const dispatch = useDispatch();
 
 	const onSubmitHandler = (e) => {
