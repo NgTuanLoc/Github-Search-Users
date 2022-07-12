@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { toggleError, checkUserRequest } from './githubUserSlice';
+import { checkUserRequest } from './githubUserSlice';
 
 const checkUserRequestThunk = async (url, thunkAPI) => {
 	try {

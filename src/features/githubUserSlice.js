@@ -63,7 +63,7 @@ const githubUserSlice = createSlice({
 			const { githubUser, repos, followers } = payload;
 			state.loading = false;
 			state.githubUsers = githubUser;
-			// state.repos = repos;
+			state.repos = repos;
 			state.followers = followers;
 			state.error = { show: false, msg: '' };
 		},
