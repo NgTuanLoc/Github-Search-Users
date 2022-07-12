@@ -21,9 +21,7 @@ const searchGithubUserThunk = async (user, url, thunkAPI) => {
 		return response.data;
 	} catch (error) {
 		const message = error.response.statusText;
-		if (error.response.status === 404) {
-			thunkAPI.dispatch(toggleError(message));
-		}
+
 		return thunkAPI.rejectWithValue(message);
 	}
 };
